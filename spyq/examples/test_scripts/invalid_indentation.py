@@ -1,4 +1,3 @@
-
 # This script has indentation issues
 def hello():
   print("Hello, World!")  # Inconsistent indentation

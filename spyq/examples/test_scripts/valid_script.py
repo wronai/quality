@@ -1,4 +1,3 @@
-
 # This is a valid Python script
 def hello():
     print("Hello, World!")

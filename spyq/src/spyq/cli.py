@@ -6,14 +6,20 @@ before code execution. It integrates with popular tools like ESLint, Prettier, a
 """
 
 import argparse
+import json
 import sys
-from typing import Optional, List
 from pathlib import Path
+from typing import Optional, List, Dict, Any
 
+from .config import ConfigManager, DEFAULT_CONFIG
+from .validator import validate_file, ValidationError
+from .importhook import install_import_hook, uninstall_import_hook
+
+# Legacy imports for backward compatibility
 from .setup_quality_guard import setup_quality_guard
 from .commands.init import init_command
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 def parse_args(args: List[str]) -> argparse.Namespace:
     """Parse command line arguments."""

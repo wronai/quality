@@ -1,4 +1,3 @@
-
 # This script has whitespace issues
 def hello():
     result=1+2  # Missing spaces around operators
