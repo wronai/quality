@@ -82,10 +82,10 @@ format:
 # Clean build artifacts and caches
 clean:
 	@echo "Cleaning up..."
-	rm -rf build/ dist/ *.egg-info/
-	find . -type d -name __pycache__ -exec rm -rf {} \;
-	find . -type d -name .pytest_cache -exec rm -rf {} \;
-	find . -type d -name .mypy_cache -exec rm -rf {} \;
+	rm -rf build/ dist/ *.egg-info/ || true
+	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+	find . -type d -name .pytest_cache -exec rm -rf {} + 2>/dev/null || true
+	find . -type d -name .mypy_cache -exec rm -rf {} + 2>/dev/null || true
 
 # Build package
 build:

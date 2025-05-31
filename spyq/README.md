@@ -52,153 +52,191 @@ python -m spyq your_script.py
 SPYQ_DISABLE=1 python your_script.py
 ```
 
-### 3. Initialize Configuration (Optional)
+### 3. Configuration
+
+SPYQ uses a `spyq.json` configuration file to define validation rules. You can create one in your project root or in your home directory (`~/.config/spyq/config.json`).
+
+#### Default Configuration
+
+```json
+{
+    "version": "1.0.0",
+    "rules": {
+        "max_file_lines": 300,
+        "max_function_lines": 50,
+        "max_function_params": 4,
+        "max_nesting_depth": 4,
+        "require_docstrings": true,
+        "require_type_hints": true,
+        "forbid_global_vars": true,
+        "forbid_bare_except": true,
+        "forbid_print_statements": false
+    }
+}
+```
+
+#### Creating Configuration
 
 ```bash
-# Create a default spyq.json in your project
+# Create a project-level config
 spyq init --project
-```
-spyq init
+
+# Create a user-level config
+spyq init --user
+
+# Create config at specific path
+spyq init --path custom/path/config.json
 ```
 
-### 3. Set Up Quality Guard
+## 📦 Advanced Usage
+
+### Manual Validation
 
 ```bash
-# Set up quality guard in your project
-spyq setup
+# Validate a single file
+spyq validate path/to/script.py
+
+# Validate a directory
+spyq validate path/to/directory
+
+# Validate with strict mode (warnings become errors)
+spyq validate --strict script.py
 ```
 
-### 4. Run Your Code
+### Running Scripts with Validation
 
 ```bash
-# Your code will now be checked before execution
-python your_script.py
+# Basic usage
+python script.py
+
+# Explicitly use SPYQ
+python -m spyq script.py
+
+# With arguments
+python script.py --arg1 value1
+
+# Disable validation
+SPYQ_DISABLE=1 python script.py
 ```
 
-## 📦 Installation
+### Integration with IDEs
 
-### Prerequisites
-- Python 3.7 or higher
-- pip (Python package manager)
-- Git (for development installation)
+Most IDEs allow you to configure the Python interpreter. You can set it to use SPYQ:
 
-### Install from PyPI
+1. **VS Code**: Update `python.pythonPath` in settings
+2. **PyCharm**: Set up a custom Python interpreter pointing to SPYQ
+3. **Vim/Neovim**: Use `:set makeprg=python\ -m\ spyq\ %`
 
-```bash
-pip install spyq
-```
+## 🛠️ Development
 
 ### Install from Source
+
+```bash
+git clone https://github.com/wronai/quality.git
+cd quality/spyq
+pip install -e .[dev]  # Install with development dependencies
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=spyq --cov-report=term-missing
+
+# Run specific test file
+pytest tests/test_validator.py -v
+```
+```
+
+## 📚 Documentation
+
+### Core Features
+
+- **Automatic Validation**: Scripts are validated before execution
+- **Configurable Rules**: Customize validation rules via `spyq.json`
+- **Multiple Config Levels**: Project-level and user-level configurations
+- **IDE Integration**: Works with popular Python IDEs and editors
+- **Extensible**: Easy to add custom validation rules
+
+### Validation Rules
+
+| Rule | Default | Description |
+|------|---------|-------------|
+| `max_file_lines` | 300 | Maximum lines per file |
+| `max_function_lines` | 50 | Maximum lines per function |
+| `max_function_params` | 4 | Maximum parameters per function |
+| `max_nesting_depth` | 4 | Maximum nesting depth |
+| `require_docstrings` | true | Require docstrings |
+| `require_type_hints` | true | Require type hints |
+| `forbid_global_vars` | true | Forbid global variables |
+| `forbid_bare_except` | true | Forbid bare except clauses |
+| `forbid_print_statements` | false | Forbid print statements |
+
+## 🏗️ Project Structure
+
+```
+spyq/
+├── src/
+│   └── spyq/
+│       ├── __init__.py
+│       ├── __main__.py        # Main entry point
+│       ├── validator.py       # Core validation logic
+│       ├── config.py          # Configuration management
+│       ├── imphook.py         # Import hook for validation
+│       └── scripts/
+│           └── spyq-python   # Python wrapper script
+├── tests/                    # Test files
+├── examples/                 # Example scripts
+│   ├── bad_script.py        # Example with issues
+│   └── good_script.py       # Example following best practices
+├── pyproject.toml           # Project configuration
+└── README.md                # This file
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how to get started:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Setup
 
 ```bash
 # Clone the repository
 git clone https://github.com/wronai/quality.git
 cd quality/spyq
-cd spyq
 
-# Install in development mode
-pip install -e .
+# Set up development environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -e .[dev]
 
-# Or install with pipx for isolated installation
-pipx install -e .
+# Run tests
+pytest
+
+# Run linters
+black .
+isort .
+flake8
+mypy .
 ```
 
-## ⚙️ Configuration
+## 📄 License
 
-SPYQ uses a configuration file (`.spyq/config.json`) to enforce code quality rules. The configuration is automatically created when you run `spyq init`.
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
-### Configuration Files
+## 🙏 Acknowledgments
 
-1. **`.spyq/config.json`** - Main configuration file
-2. **`.eslintrc.advanced.js`** - Advanced ESLint rules
-3. **`.prettierrc`** - Code formatting rules
-4. **`sonar-project.properties`** - SonarQube configuration
-
-### Main Configuration (`config.json`)
-
-```json
-{
-  "version": "1.0.0",
-  "description": "Quality Guard configuration",
-  "rules": {
-    "require_tests": true,
-    "require_docstrings": true,
-    "require_architecture_docs": false,
-    "max_file_lines": 300,
-    "max_function_lines": 50,
-    "max_function_params": 4,
-    "max_nesting_depth": 4,
-    "max_complexity": 10,
-    "max_class_methods": 15
-  },
-  "enforcement": {
-    "level": "error",
-    "strict_mode": true,
-    "block_execution": true
-  },
-  "patterns": {
-    "test_patterns": [
-      "tests/test_*.py",
-      "test_*.py",
-      "*_test.py",
-      "tests/**/test_*.py"
-    ],
-    "doc_files": [
-      "README.md",
-      "docs/README.md",
-      "docs/API.md",
-      "docs/architecture.md"
-    ],
-    "forbidden_patterns": [
-      "eval(",
-      "exec(",
-      "globals()",
-      "__import__",
-      "input("
-    ]
-  },
-  "auto_generation": {
-    "enabled": true,
-    "tests": true,
-    "docs": true,
-    "templates_dir": "templates/"
-  },
-  "exceptions": {
-    "missing_test": "MissingTestException",
-    "missing_docs": "MissingDocumentationException",
-    "invalid_structure": "InvalidStructureException"
-  }
-}
-```
-
-## 📚 Documentation
-
-For detailed documentation, please refer to:
-
-- [📖 Architecture](docs/ARCHITECTURE.md) - System design and components
-- [📚 API Reference](docs/API.md) - Detailed API documentation
-- [👥 Contributing](docs/CONTRIBUTING.md) - How to contribute to SPYQ
-
-## 🧪 Testing
-
-SPYQ includes comprehensive testing with both unit and integration tests, including Docker and Ansible test scenarios.
-
-### Running Tests Locally
-
-```bash
-# Install development dependencies
-pip install -e ".[dev]"
-
-# Run all tests
-make test
-
-# Run tests with coverage report
-pytest --cov=spyq --cov-report=term-missing
-
-# Run specific test file
-pytest tests/test_module.py
-
-# Run linter
+- Thanks to all contributors who have helped improve SPYQ
+- Inspired by various Python quality tools and linters
+- Built with ❤️ by the Wronai team
 make lint
 
 # Run type checking
