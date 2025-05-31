@@ -5,7 +5,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Documentation](https://img.shields.io/badge/docs-📘-brightgreen)](https://github.com/wronai/spyq/tree/main/docs)
 
-SPYQ is a powerful quality guard system for Python projects that enforces code quality standards before execution. It ensures your code meets quality standards before it runs, preventing technical debt and maintaining high code quality across your projects.
+SPYQ is a powerful quality guard system that automatically validates Python code before execution. It ensures your code meets quality standards before it runs, preventing technical debt and maintaining high code quality across your projects.
 
 ## 📋 Table of Contents
 
@@ -20,15 +20,15 @@ SPYQ is a powerful quality guard system for Python projects that enforces code q
 
 ## ✨ Features
 
-- 🚀 **Automatic Quality Checks** - Run quality checks before code execution
-- 🛡️ **100% Enforcement** - Code won't run if it doesn't meet quality standards
-- ⚡ **Zero Setup** - Get started with a single command
-- 🔧 **Configurable** - Customize rules to fit your project's needs
-- 📊 **Comprehensive Reports** - Get detailed quality reports
-- 🔄 **CI/CD Ready** - Seamless integration with CI/CD pipelines
-- 🐳 **Docker Support** - Test in isolated environments
-- 🧪 **Test Coverage** - Enforce minimum test coverage requirements
-- 📝 **Documentation Checks** - Ensure proper code documentation
+- 🚀 **Automatic Validation** - Validates Python scripts before execution
+- 🛡️ **Zero Configuration** - Works out of the box with sensible defaults
+- ⚡ **Seamless Integration** - No changes to your workflow needed
+- 🔧 **Configurable** - Customize rules via `spyq.json`
+- 📊 **Detailed Feedback** - Clear error messages with line numbers
+- 🔄 **CI/CD Ready** - Perfect for automated pipelines
+- 🐳 **Docker Compatible** - Works in containerized environments
+- 🧪 **Tested** - Comprehensive test coverage
+- 📝 **Documented** - Clear documentation and examples
 
 ## 🚀 Quick Start
 
@@ -37,18 +37,27 @@ SPYQ is a powerful quality guard system for Python projects that enforces code q
 ```bash
 # Install from PyPI
 pip install spyq
-
-# Or install the latest version from source
-pip install git+https://github.com/wronai/spyq.git
 ```
 
-### 2. Initialize a New Project
+### 2. Run Python Scripts with Validation
 
 ```bash
-# Navigate to your project directory
-cd your-project
+# Run any Python script with automatic validation
+python your_script.py
 
-# Initialize SPYQ configuration
+# Or use the explicit command
+python -m spyq your_script.py
+
+# Disable validation if needed
+SPYQ_DISABLE=1 python your_script.py
+```
+
+### 3. Initialize Configuration (Optional)
+
+```bash
+# Create a default spyq.json in your project
+spyq init --project
+```
 spyq init
 ```
 

@@ -41,3 +41,4 @@ line_length = 88
 testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "-v --cov=spyq --cov-report=term-missing"
+

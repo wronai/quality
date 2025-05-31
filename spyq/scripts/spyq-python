@@ -1,0 +1,24 @@
+# File: spyq/scripts/spyq-python
+#!/bin/bash
+
+# Get the real Python executable
+REAL_PYTHON="${PYTHON:-python3}"
+
+# If no arguments, run Python REPL
+if [ $# -eq 0 ]; then
+    exec "$REAL_PYTHON"
+fi
+
+# If the first argument is a Python file, validate it
+if [[ "$1" == *.py && -f "$1" ]]; then
+    # Check if spyq is installed
+    if "$REAL_PYTHON" -c "import spyq" 2>/dev/null; then
+        exec "$REAL_PYTHON" -m spyq "$@"
+    else
+        # Fall back to regular Python if spyq is not installed
+        exec "$REAL_PYTHON" "$@"
+    fi
+else
+    # Otherwise, pass through to Python
+    exec "$REAL_PYTHON" "$@"
+fi
