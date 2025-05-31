@@ -1,5 +1,6 @@
 .idea
 .env
+my-project
 __pycache__/
 *.py[cod]
 *$py.class

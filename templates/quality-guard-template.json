@@ -1,0 +1,558 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Quality Guard Configuration Template",
+  "description": "Template for Quality Guard project configuration with various presets",
+  "type": "object",
+
+  "presets": {
+    "startup": {
+      "name": "Startup/Prototype",
+      "description": "Relaxed rules for rapid prototyping and MVP development",
+      "config": {
+        "version": "1.0.0",
+        "rules": {
+          "require_tests": false,
+          "require_docstrings": false,
+          "require_architecture_docs": false,
+          "max_file_lines": 300,
+          "max_function_lines": 100,
+          "max_function_params": 6,
+          "max_nesting_depth": 6,
+          "max_complexity": 20,
+          "max_class_methods": 25
+        },
+        "enforcement": {
+          "level": "warning",
+          "strict_mode": false
+        },
+        "patterns": {
+          "notebook_files": ["*.ipynb"],
+          "exploration_dirs": ["notebooks/", "experiments/", "analysis/"]
+        },
+        "data_science_specific": {
+          "require_reproducibility": true,
+          "require_data_validation": true,
+          "max_notebook_cells": 100
+        }
+      }
+    },
+
+    "web_api": {
+      "name": "Web API/Microservices",
+      "description": "Optimized for web APIs and microservices",
+      "config": {
+        "version": "1.0.0",
+        "rules": {
+          "require_tests": true,
+          "require_docstrings": true,
+          "require_architecture_docs": true,
+          "max_file_lines": 200,
+          "max_function_lines": 40,
+          "max_function_params": 4,
+          "max_nesting_depth": 3,
+          "max_complexity": 8,
+          "max_class_methods": 15
+        },
+        "enforcement": {
+          "level": "error",
+          "strict_mode": true
+        },
+        "web_api_specific": {
+          "require_openapi_docs": true,
+          "require_error_handling": true,
+          "require_input_validation": true,
+          "max_endpoint_complexity": 5
+        }
+      }
+    }
+  },
+
+  "language_specific": {
+    "python": {
+      "file_extensions": [".py"],
+      "additional_rules": {
+        "require_type_hints": true,
+        "max_line_length": 88,
+        "require_main_guard": true,
+        "pep8_compliance": true
+      },
+      "forbidden_patterns": [
+        "eval(",
+        "exec(",
+        "globals()",
+        "__import__",
+        "input("
+      ],
+      "tools": {
+        "formatter": "black",
+        "linter": "flake8",
+        "type_checker": "mypy",
+        "test_framework": "pytest"
+      }
+    },
+
+    "javascript": {
+      "file_extensions": [".js", ".jsx"],
+      "additional_rules": {
+        "require_jsdoc": true,
+        "max_line_length": 100,
+        "no_var_declarations": true,
+        "prefer_const": true
+      },
+      "forbidden_patterns": [
+        "eval(",
+        "Function(",
+        "setTimeout.*string",
+        "setInterval.*string"
+      ],
+      "tools": {
+        "formatter": "prettier",
+        "linter": "eslint",
+        "test_framework": "jest"
+      }
+    },
+
+    "typescript": {
+      "file_extensions": [".ts", ".tsx"],
+      "additional_rules": {
+        "strict_mode": true,
+        "no_any_type": true,
+        "require_return_types": true,
+        "no_implicit_any": true
+      },
+      "tools": {
+        "formatter": "prettier",
+        "linter": "eslint",
+        "type_checker": "tsc",
+        "test_framework": "jest"
+      }
+    }
+  },
+
+  "environment_specific": {
+    "development": {
+      "debug_mode": true,
+      "verbose_logging": true,
+      "auto_fix": true,
+      "real_time_feedback": true
+    },
+
+    "staging": {
+      "debug_mode": false,
+      "verbose_logging": false,
+      "auto_fix": false,
+      "require_all_tests": true
+    },
+
+    "production": {
+      "debug_mode": false,
+      "verbose_logging": false,
+      "auto_fix": false,
+      "require_all_tests": true,
+      "require_security_scan": true,
+      "block_on_any_violation": true
+    }
+  },
+
+  "integration_templates": {
+    "github_actions": {
+      "workflow_file": ".github/workflows/quality-guard.yml",
+      "triggers": ["push", "pull_request"],
+      "jobs": [
+        "quality-check",
+        "test-coverage",
+        "security-scan"
+      ]
+    },
+
+    "vscode": {
+      "settings_file": ".vscode/settings.json",
+      "extensions": [
+        "ms-python.python",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-eslint"
+      ],
+      "tasks": [
+        "quality-check",
+        "run-tests",
+        "format-code"
+      ]
+    },
+
+    "pre_commit": {
+      "config_file": ".pre-commit-config.yaml",
+      "hooks": [
+        "quality-guard-check",
+        "black",
+        "flake8",
+        "pytest"
+      ]
+    },
+
+    "docker": {
+      "dockerfile_additions": [
+        "COPY quality-guard/ /opt/quality-guard/",
+        "RUN pip install -e /opt/quality-guard/",
+        "ENV QUALITY_GUARD_ENABLE=1"
+      ]
+    }
+  },
+
+  "custom_rules_examples": {
+    "api_specific": {
+      "name": "API Endpoint Rules",
+      "rules": {
+        "max_endpoint_params": 5,
+        "require_input_validation": true,
+        "require_error_responses": true,
+        "max_response_time": "500ms"
+      }
+    },
+
+    "security_focused": {
+      "name": "Security-First Rules",
+      "rules": {
+        "no_hardcoded_secrets": true,
+        "require_input_sanitization": true,
+        "no_sql_injection_patterns": true,
+        "require_https_only": true
+      }
+    },
+
+    "performance_focused": {
+      "name": "Performance Rules",
+      "rules": {
+        "max_memory_usage": "100MB",
+        "max_execution_time": "5s",
+        "no_blocking_operations": true,
+        "require_caching": true
+      }
+    }
+  },
+
+  "reporting_templates": {
+    "basic": {
+      "format": "console",
+      "include_suggestions": true,
+      "include_metrics": false
+    },
+
+    "detailed": {
+      "format": "html",
+      "include_suggestions": true,
+      "include_metrics": true,
+      "include_trends": true,
+      "export_formats": ["html", "json", "csv"]
+    },
+
+    "dashboard": {
+      "format": "web",
+      "real_time": true,
+      "team_metrics": true,
+      "quality_trends": true,
+      "alerts": true
+    }
+  },
+
+  "migration_guides": {
+    "from_eslint": {
+      "description": "Migrate from ESLint to Quality Guard",
+      "mapping": {
+        "max-len": "max_line_length",
+        "complexity": "max_complexity",
+        "max-depth": "max_nesting_depth",
+        "max-params": "max_function_params"
+      }
+    },
+
+    "from_pylint": {
+      "description": "Migrate from Pylint to Quality Guard",
+      "mapping": {
+        "C0103": "naming_conventions",
+        "C0301": "max_line_length",
+        "R0903": "max_class_methods",
+        "R0913": "max_function_params"
+      }
+    },
+
+    "from_sonar": {
+      "description": "Migrate from SonarQube to Quality Guard",
+      "mapping": {
+        "squid:S138": "max_function_lines",
+        "squid:S1541": "max_complexity",
+        "squid:S134": "max_nesting_depth"
+      }
+    }
+  },
+
+  "examples": {
+    "minimal_config": {
+      "description": "Minimal Quality Guard configuration",
+      "config": {
+        "rules": {
+          "max_function_lines": 50,
+          "require_docstrings": true
+        }
+      }
+    },
+
+    "full_config": {
+      "description": "Complete Quality Guard configuration example",
+      "config": {
+        "version": "1.0.0",
+        "rules": {
+          "require_tests": true,
+          "require_docstrings": true,
+          "require_architecture_docs": true,
+          "max_file_lines": 200,
+          "max_function_lines": 50,
+          "max_function_params": 4,
+          "max_nesting_depth": 4,
+          "max_complexity": 10,
+          "max_class_methods": 15
+        },
+        "enforcement": {
+          "level": "error",
+          "strict_mode": true,
+          "block_execution": true
+        },
+        "patterns": {
+          "test_patterns": [
+            "tests/test_*.py",
+            "test_*.py",
+            "*_test.py"
+          ],
+          "doc_files": [
+            "README.md",
+            "docs/API.md",
+            "docs/architecture.md"
+          ],
+          "forbidden_patterns": [
+            "eval(",
+            "exec(",
+            "globals()"
+          ]
+        },
+        "auto_generation": {
+          "enabled": true,
+          "tests": true,
+          "docs": true,
+          "templates_dir": "templates/"
+        },
+        "integrations": {
+          "vscode": true,
+          "github_actions": true,
+          "pre_commit": true,
+          "docker": true
+        },
+        "reporting": {
+          "enabled": true,
+          "format": "html",
+          "output_dir": "reports/",
+          "include_suggestions": true,
+          "include_metrics": true
+        }
+      }
+    }
+  },
+
+  "usage_instructions": {
+    "setup": [
+      "1. Choose a preset that matches your project type",
+      "2. Copy the configuration to quality-config.json",
+      "3. Customize rules based on your team's needs",
+      "4. Run: python setup_quality_guard.py --local",
+      "5. Test with a sample file to verify setup"
+    ],
+
+    "customization": [
+      "1. Start with a preset close to your needs",
+      "2. Adjust rule thresholds gradually",
+      "3. Add language-specific rules if needed",
+      "4. Configure integrations for your tools",
+      "5. Set up reporting to track improvements"
+    ],
+
+    "team_adoption": [
+      "1. Start with relaxed rules (startup preset)",
+      "2. Get team buy-in with demo sessions",
+      "3. Gradually tighten rules over 2-3 sprints",
+      "4. Enable auto-generation for easier adoption",
+      "5. Monitor metrics and adjust based on feedback"
+    ]
+  }
+}",
+          "strict_mode": false,
+          "block_execution": false
+        },
+        "auto_generation": {
+          "enabled": true,
+          "tests": true,
+          "docs": true
+        }
+      }
+    },
+
+    "development": {
+      "name": "Development/Standard",
+      "description": "Balanced rules for active development teams",
+      "config": {
+        "version": "1.0.0",
+        "rules": {
+          "require_tests": true,
+          "require_docstrings": true,
+          "require_architecture_docs": false,
+          "max_file_lines": 200,
+          "max_function_lines": 50,
+          "max_function_params": 4,
+          "max_nesting_depth": 4,
+          "max_complexity": 10,
+          "max_class_methods": 15
+        },
+        "enforcement": {
+          "level": "error",
+          "strict_mode": false,
+          "block_execution": true
+        },
+        "auto_generation": {
+          "enabled": true,
+          "tests": false,
+          "docs": true
+        }
+      }
+    },
+
+    "production": {
+      "name": "Production/Enterprise",
+      "description": "Strict rules for production-ready code",
+      "config": {
+        "version": "1.0.0",
+        "rules": {
+          "require_tests": true,
+          "require_docstrings": true,
+          "require_architecture_docs": true,
+          "max_file_lines": 150,
+          "max_function_lines": 30,
+          "max_function_params": 3,
+          "max_nesting_depth": 3,
+          "max_complexity": 7,
+          "max_class_methods": 10
+        },
+        "enforcement": {
+          "level": "error",
+          "strict_mode": true,
+          "block_execution": true
+        },
+        "auto_generation": {
+          "enabled": false,
+          "tests": false,
+          "docs": false
+        }
+      }
+    },
+
+    "legacy": {
+      "name": "Legacy Code",
+      "description": "Gradual improvement rules for legacy codebases",
+      "config": {
+        "version": "1.0.0",
+        "rules": {
+          "require_tests": false,
+          "require_docstrings": true,
+          "require_architecture_docs": false,
+          "max_file_lines": 500,
+          "max_function_lines": 200,
+          "max_function_params": 8,
+          "max_nesting_depth": 8,
+          "max_complexity": 30,
+          "max_class_methods": 50
+        },
+        "enforcement": {
+          "level": "warning",
+          "strict_mode": false,
+          "block_execution": false,
+          "legacy_mode": true
+        },
+        "patterns": {
+          "whitelist_files": [
+            "legacy/**/*",
+            "old_modules/**/*",
+            "deprecated/**/*"
+          ]
+        }
+      }
+    },
+
+    "team_small": {
+      "name": "Small Team (1-5 developers)",
+      "description": "Optimized for small, agile teams",
+      "config": {
+        "version": "1.0.0",
+        "rules": {
+          "require_tests": true,
+          "require_docstrings": true,
+          "require_architecture_docs": false,
+          "max_file_lines": 250,
+          "max_function_lines": 75,
+          "max_function_params": 5,
+          "max_nesting_depth": 5,
+          "max_complexity": 12,
+          "max_class_methods": 20
+        },
+        "enforcement": {
+          "level": "warning",
+          "strict_mode": false
+        },
+        "collaboration": {
+          "require_code_review": false,
+          "auto_assign_reviewers": false
+        }
+      }
+    },
+
+    "team_large": {
+      "name": "Large Team (20+ developers)",
+      "description": "Strict rules for large development teams",
+      "config": {
+        "version": "1.0.0",
+        "rules": {
+          "require_tests": true,
+          "require_docstrings": true,
+          "require_architecture_docs": true,
+          "max_file_lines": 150,
+          "max_function_lines": 40,
+          "max_function_params": 3,
+          "max_nesting_depth": 3,
+          "max_complexity": 8,
+          "max_class_methods": 12
+        },
+        "enforcement": {
+          "level": "error",
+          "strict_mode": true
+        },
+        "collaboration": {
+          "require_code_review": true,
+          "min_reviewers": 2,
+          "auto_assign_reviewers": true
+        }
+      }
+    },
+
+    "data_science": {
+      "name": "Data Science",
+      "description": "Adapted rules for data science and research projects",
+      "config": {
+        "version": "1.0.0",
+        "rules": {
+          "require_tests": false,
+          "require_docstrings": true,
+          "require_architecture_docs": false,
+          "max_file_lines": 400,
+          "max_function_lines": 100,
+          "max_function_params": 6,
+          "max_nesting_depth": 5,
+          "max_complexity": 15,
+          "max_class_methods": 30
+        },
+        "enforcement": {
+          "level": "warning
