@@ -1,5 +1,8 @@
-# setup_quality_guard_fixed.py
-# Naprawiony skrypt instalacyjny Quality Guard
+"""
+SPYQ - Quality Guard Setup
+
+This module provides functionality to set up Quality Guard in a Python project.
+"""
 
 import os
 import sys
@@ -7,6 +10,7 @@ import subprocess
 import json
 from pathlib import Path
 import shutil
+from typing import Optional, Union, Dict, Any
 
 
 class QualityGuardInstaller:
@@ -679,11 +683,46 @@ def test_calculate_sum():
         print("4. Sprawdź czy pip jest zainstalowany")
 
 
-def main():
-    """Główna funkcja programu"""
-    installer = QualityGuardInstaller()
+def setup_quality_guard(project_path: Union[str, Path], force: bool = False) -> bool:
+    """
+    Set up Quality Guard in the specified project directory.
 
-    if len(sys.argv) > 1:
+    Args:
+        project_path: Path to the project directory where Quality Guard should be set up
+        force: If True, overwrite existing files
+
+    Returns:
+        bool: True if setup was successful, False otherwise
+    """
+    try:
+        installer = QualityGuardInstaller()
+        # Change to the project directory
+        original_dir = os.getcwd()
+        os.chdir(str(project_path))
+        
+        # Run the local installation
+        result = installer.install_option_3_project_local()
+        
+        # Change back to the original directory
+        os.chdir(original_dir)
+        return result
+    except Exception as e:
+        print(f"Error setting up Quality Guard: {e}", file=sys.stderr)
+        return False
+
+
+def main():
+    """Main entry point for the setup script."""
+    if len(sys.argv) > 1 and sys.argv[1] in ['--help', '-h']:
+        print("Usage: spyq setup [path] [--force]")
+        print("\nOptions:")
+        print("  path     Path to the project directory (default: current directory)")
+        print("  --force  Overwrite existing files")
+        return
+
+    # For backward compatibility with the original script
+    if len(sys.argv) > 1 and any(arg.startswith('--') for arg in sys.argv[1:]):
+        installer = QualityGuardInstaller()
         option = sys.argv[1]
         if option == "--pip":
             installer.install_option_1_pip_package()
@@ -700,8 +739,9 @@ def main():
             installer.install_option_3_project_local()
             installer.create_demo_files()
         else:
-            print("Opcje: --pip, --site, --local, --demo, --all")
+            print("Options: --pip, --site, --local, --demo, --all")
     else:
+        installer = QualityGuardInstaller()
         installer.interactive_install()
 
 

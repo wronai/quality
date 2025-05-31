@@ -1,94 +1,73 @@
-# Makefile for Bexy
+# Makefile for SPYQ - Shell Python Quality Guard
 
-.PHONY: all setup clean test lint format run help venv docker-test docker-build docker-clean test-package update-version publish publish-test
-
-# Default values
-PORT ?= 8000
-HOST ?= 0.0.0.0
+.PHONY: all setup install test lint format clean build publish help
 
 # Default target
 all: help
 
-# Create virtual environment if it doesn't exist
-venv:
-	@test -d venv || python3 -m venv venv
+# Help target
+help:
+	@echo "SPYQ - Shell Python Quality Guard"
+	@echo ""
+	@echo "Available targets:"
+	@echo "  setup     Create virtual environment and install dependencies"
+	@echo "  install   Install the package in development mode"
+	@echo "  test      Run tests"
+	@echo "  lint      Run code linter"
+	@echo "  format    Format code with black"
+	@echo "  clean     Remove build artifacts and caches"
+	@echo "  build     Build package"
+	@echo "  publish   Publish package to PyPI"
+	@echo "  help      Show this help message"
 
-# Setup project
-setup: venv
-	@echo "Setting up Bexy..."
-	@. venv/bin/activate && pip install -e .
+# Create virtual environment and install dependencies
+setup:
+	@echo "Setting up development environment..."
+	python -m venv venv
+	. venv/bin/activate && \
+	pip install --upgrade pip && \
+	pip install -e ".[dev]"
 
-# Clean project
-clean:
-	@echo "Cleaning Bexy..."
-	find . -type d -name __pycache__ -exec rm -rf {} +
-	find . -type d -name *.egg-info -exec rm -rf {} +
-	find . -type d -name .pytest_cache -exec rm -rf {} +
+# Install the package in development mode
+install:
+	@echo "Installing SPYQ in development mode..."
+	pip install -e .
+
 
 # Run tests
-test: setup
-	@echo "Testing Bexy..."
-	@. venv/bin/activate && python -m unittest discover
+test:
+	@echo "Running tests..."
+	pytest tests/
 
-# Lint code
-lint: setup
-	@echo "Linting BEXY..."
-	@. venv/bin/activate && flake8 bexy
+# Run code linter
+lint:
+	@echo "Running linter..."
+	flake8 src/spyq tests
 
-# Format code
-format: setup
-	@echo "Formatting BEXY..."
-	@. venv/bin/activate && black bexy
+# Format code with black
+format:
+	@echo "Formatting code..."
+	black src/spyq tests
 
-# Run the API server
-run: setup
-	@echo "Running BEXY API server on default port $(PORT)..."
-	@. venv/bin/activate && python -m bexy.api --port $(PORT) --host $(HOST)
-
-# Run with custom port (for backward compatibility)
-run-port: setup
-	@echo "Running BEXY API server on port $(PORT)..."
-	@. venv/bin/activate && python -m bexy.api --port $(PORT) --host $(HOST)
-
-# Docker testing targets
-docker-build:
-	@echo "Building Docker test images..."
-	@./run_docker_tests.sh --build
-
-docker-test: docker-build
-	@echo "Running tests in Docker..."
-	@./run_docker_tests.sh --run-tests
-
-docker-interactive: docker-build
-	@echo "Starting interactive Docker test environment..."
-	@./run_docker_tests.sh --interactive
-
-docker-mock: docker-build
-	@echo "Starting BEXY mock service in Docker..."
-	@./run_docker_tests.sh --mock-service
-
-docker-clean:
-	@echo "Cleaning Docker test environment..."
-	@./run_docker_tests.sh --clean
-
+# Clean build artifacts and caches
+clean:
+	@echo "Cleaning up..."
+	rm -rf build/ dist/ *.egg-info/
+	find . -type d -name __pycache__ -exec rm -rf {} \;
+	find . -type d -name .pytest_cache -exec rm -rf {} \;
+	find . -type d -name .mypy_cache -exec rm -rf {} \;
 
 # Build package
-build: setup
+build:
 	@echo "Building package..."
-	@. venv/bin/activate && pip install -e . && pip install wheel twine build
-	@. venv/bin/activate && rm -rf dist/* && python -m build
-
-# Update version (manually update version in pyproject.toml)
-update-version:
-	@echo "Please update the version in pyproject.toml manually"
-	@exit 1
+	python -m pip install --upgrade build
+	python -m build
 
 # Publish package to PyPI
-publish: build
-	@echo "Publishing package to PyPI..."
-	@. venv/bin/activate && twine check dist/* && twine upload dist/*
+publish: clean build
+	@echo "Publishing to PyPI..."
+	python -m pip install --upgrade twine
+	python -m twine upload dist/*
 
-# Publish package to TestPyPI
-publish-test: build
-	@echo "Publishing package to TestPyPI..."
-	@. venv/bin/activate && twine check dist/* && twine upload --repository testpypi dist/*
+# Show help
+.PHONY: help
