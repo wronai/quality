@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "spyq"
-version = "0.1.5"
+version = "0.1.6"
 description = "SPYQ - Shell Python Quality Guard"
 authors = ["Tom Sapletta <tom@sapletta.com>"]
 readme = "README.md"
