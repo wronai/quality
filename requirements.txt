@@ -1,0 +1,19 @@
+# Quality Guard Requirements
+
+# Core dependencies (minimal)
+# Quality Guard is designed to work with Python stdlib only
+
+# Optional dependencies for enhanced features
+# Uncomment if you want full functionality:
+
+# jq>=1.2.0                    # For JSON processing in shell scripts
+# complexity-report>=2.0.0     # For complexity analysis  
+# jsinspect>=0.8.0            # For duplicate detection in JS
+# pytest>=6.0.0              # For test discovery
+# black>=21.0.0               # For code formatting
+# flake8>=3.8.0               # For additional linting
+
+# Development dependencies
+# pytest-cov>=2.0.0          # Coverage reporting
+# mypy>=0.800                 # Type checking
+# pre-commit>=2.0.0           # Git hooks

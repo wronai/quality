@@ -1,0 +1,28 @@
+{
+  "require_tests": true,
+  "require_docstrings": true,
+  "require_architecture_docs": false,
+  "max_function_lines": 50,
+  "max_complexity": 10,
+  "enforcement_level": "error",
+  "auto_generate": {
+    "tests": true,
+    "docs": true
+  },
+  "test_patterns": [
+    "tests/test_*.py",
+    "test_*.py",
+    "*_test.py"
+  ],
+  "doc_files": [
+    "README.md",
+    "docs/API.md",
+    "ARCHITECTURE.md"
+  ],
+  "exceptions": {
+    "missing_test": "MissingTestException",
+    "missing_docs": "MissingDocumentationException",
+    "high_complexity": "ComplexityException",
+    "function_too_long": "FunctionTooLongException"
+  }
+}

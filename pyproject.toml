@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quality-guard"
+version = "1.0.0"
+description = "Automatic code quality enforcement at interpreter level"
+readme = "docs/README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Quality Guard Team", email = "team@qualityguard.dev"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers", 
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Quality Assurance",
+]
+requires-python = ">=3.7"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=2.0", 
+    "black>=21.0",
+    "flake8>=3.8",
+    "mypy>=0.800",
+]
+full = [
+    "complexity-report>=2.0",
+    "jsinspect>=0.8",
+]
+
+[project.urls]
+Homepage = "https://github.com/quality-guard/quality-guard"
+Documentation = "https://quality-guard.readthedocs.io"
+Repository = "https://github.com/quality-guard/quality-guard.git"
+Issues = "https://github.com/quality-guard/quality-guard/issues"
+
+[project.scripts]
+quality-guard = "core.setup_quality_guard:main"
+qg = "core.setup_quality_guard:main"
+
+[tool.setuptools]
+packages = ["core", "wrappers", "tools", "config", "templates"]
+
+[tool.black]
+line-length = 88
+target-version = ['py37', 'py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+
+[tool.mypy]
+python_version = "3.7"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers"
+testpaths = ["tests"]

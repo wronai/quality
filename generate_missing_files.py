@@ -1,16 +1,30 @@
 #!/usr/bin/env python3
-# generate_missing_files.py
-# Generator dla brakujących plików Quality Guard
+"""
+Quality Guard - Missing Files Generator
+
+This script generates all necessary configuration and setup files for Quality Guard.
+It ensures consistent project structure and configuration across all environments.
+
+Usage:
+    python generate_missing_files.py
+"""
 
 import os
+import sys
 import json
 from pathlib import Path
+from typing import Dict, Any, Optional
 
 
-def create_missing_files():
-    """Tworzy wszystkie brakujące pliki Quality Guard"""
-
-    print("🔧 Generowanie brakujących plików Quality Guard...")
+def create_missing_files() -> bool:
+    """
+    Creates all missing Quality Guard files and directories.
+    
+    Returns:
+        bool: True if all files were created successfully, False otherwise.
+    """
+    success = True
+    print("🔧 Generating missing Quality Guard files...")
 
     # 1. core/__init__.py
     core_init = '''"""
@@ -333,7 +347,37 @@ testpaths = ["tests"]
         }
     }
 
-    with open('config/quality-config.json', 'w') as f:
-        json.dump(quality_config, f, indent=2)
-    print("✅ config/quality-config.json")
+    try:
+        with open('config/quality-config.json', 'w') as f:
+            json.dump(quality_config, f, indent=2)
+        print("✅ config/quality-config.json")
+    except (IOError, OSError) as e:
+        print(f"❌ Error creating config/quality-config.json: {e}", file=sys.stderr)
+        success = False
+    
+    return success
 
+
+def main() -> int:
+    """Main entry point for the script.
+    
+    Returns:
+        int: Exit code (0 for success, 1 for error)
+    """
+    print("🚀 Starting Quality Guard file generation...")
+    
+    try:
+        success = create_missing_files()
+        if success:
+            print("\n✨ All files generated successfully!")
+            return 0
+        else:
+            print("\n❌ Some files could not be generated.", file=sys.stderr)
+            return 1
+    except Exception as e:
+        print(f"\n❌ An unexpected error occurred: {e}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
