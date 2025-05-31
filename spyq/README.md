@@ -29,4 +29,4 @@ spyq --help
 
 ## License
 
-MIT
++ Apache 2.0 [LICENSE](LICENSE)

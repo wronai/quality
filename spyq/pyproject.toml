@@ -7,13 +7,13 @@ name = "spyq"
 version = "0.1.0"
 description = "SPYQ - Shell Python Quality Guard"
 authors = [
-    {name = "Your Name", email = "your.email@example.com"},
+    {name = "Tom Sapletta"}
 ]
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
 

@@ -246,7 +246,7 @@ def download_quality_guard():
     print("📦 Pobieranie Quality Guard...")
     
     # Lista kluczowych plików do pobrania
-    base_url = "https://raw.githubusercontent.com/quality-guard/quality-guard/main"
+    base_url = "https://raw.githubusercontent.com/wronai/spyq/main"
     essential_files = {
         "core/quality_guard_exceptions.py": "quality_guard_exceptions.py",
         "config/quality-config.json": "quality-config.json", 

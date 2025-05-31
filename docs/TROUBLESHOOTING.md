@@ -667,8 +667,8 @@ print(f'📊 Config loaded: {len(config.config)} settings')
 
 ### Community Support
 
-1. **Search Issues:** https://github.com/quality-guard/quality-guard/issues
-2. **Discussions:** https://github.com/quality-guard/quality-guard/discussions
+1. **Search Issues:** https://github.com/wronai/spyq/issues
+2. **Discussions:** https://github.com/wronai/spyq/discussions
 3. **Documentation:** https://quality-guard.readthedocs.io
 4. **Discord:** https://discord.gg/quality-guard
 

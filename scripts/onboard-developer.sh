@@ -14,7 +14,7 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # Configuration
-QUALITY_GUARD_REPO="https://github.com/quality-guard/quality-guard.git"
+QUALITY_GUARD_REPO="https://github.com/wronai/spyq.git"
 DEMO_PROJECT_DIR="quality-guard-demo"
 ONBOARDING_LOG="onboarding-$(date +%Y%m%d_%H%M%S).log"
 
@@ -128,7 +128,7 @@ install_quality_guard() {
     cd "$TEMP_DIR"
 
     # Download essential files
-    local base_url="https://raw.githubusercontent.com/quality-guard/quality-guard/main"
+    local base_url="https://raw.githubusercontent.com/wronai/spyq/main"
     local files=(
         "core/quality_guard_exceptions.py"
         "core/setup_quality_guard.py"
@@ -737,9 +737,9 @@ EOF
    ```
 
 3. **Join the community:**
-   - GitHub: https://github.com/quality-guard/quality-guard
-   - Discussions: https://github.com/quality-guard/quality-guard/discussions
-   - Issues: https://github.com/quality-guard/quality-guard/issues
+   - GitHub: https://github.com/wronai/spyq
+   - Discussions: https://github.com/wronai/spyq/discussions
+   - Issues: https://github.com/wronai/spyq/issues
 
 ## Troubleshooting
 

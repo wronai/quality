@@ -114,7 +114,7 @@ setup(
     description="Automatic code quality enforcement at interpreter level",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/quality-guard/quality-guard",
+    url="https://github.com/wronai/spyq",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -243,10 +243,10 @@ full = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/quality-guard/quality-guard"
+Homepage = "https://github.com/wronai/spyq"
 Documentation = "https://quality-guard.readthedocs.io"
-Repository = "https://github.com/quality-guard/quality-guard.git"
-Issues = "https://github.com/quality-guard/quality-guard/issues"
+Repository = "https://github.com/wronai/spyq.git"
+Issues = "https://github.com/wronai/spyq/issues"
 
 [project.scripts]
 quality-guard = "core.setup_quality_guard:main"
