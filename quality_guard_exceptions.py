@@ -494,9 +494,11 @@ class QualityGuardInstaller:
     @staticmethod
     def install_globally():
         """Instaluje Quality Guard globalnie w interpreterze"""
+        import builtins
 
         # Hook do importów
-        original_import = __builtins__.__import__
+        original_import = builtins.__import__
+
 
         def quality_import(name, globals=None, locals=None, fromlist=(), level=0):
             module = original_import(name, globals, locals, fromlist, level)
@@ -508,7 +510,12 @@ class QualityGuardInstaller:
 
             return module
 
-        __builtins__.__import__ = quality_import
+        # Ustaw nową funkcję importu
+        builtins.__import__ = quality_import
+        
+        # Oznacz jako zainstalowane
+        sys._quality_guard_installed = True
+        sys._quality_guard_version = "1.0.0"
 
     @staticmethod
     def _add_quality_guard_to_module(module):
