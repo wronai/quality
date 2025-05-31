@@ -168,8 +168,6 @@ publish: version clean build
 	@echo "Publishing to PyPI..."
 	$(PYTHON) -m pip install --upgrade twine
 	$(PYTHON) -m twine upload dist/*
-	python -m pip install --upgrade twine
-	python -m twine upload dist/*
 
 # Show help
 .PHONY: help

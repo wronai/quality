@@ -1,0 +1,71 @@
+{
+  "codeGeneration": {
+    "enforceGuidelines": true,
+    "rules": [
+      {
+        "type": "file-size",
+        "maxLines": 200,
+        "action": "suggest-split",
+        "severity": "error"
+      },
+      {
+        "type": "function-size",
+        "maxLines": 50,
+        "action": "suggest-extract",
+        "severity": "warning"
+      },
+      {
+        "type": "documentation",
+        "require": ["public-functions", "classes", "interfaces"],
+        "format": "jsdoc",
+        "severity": "error"
+      },
+      {
+        "type": "testing",
+        "require": "unit-tests",
+        "coverage": 80,
+        "severity": "warning"
+      },
+      {
+        "type": "duplication",
+        "maxTokens": 30,
+        "action": "suggest-extract",
+        "severity": "warning"
+      }
+    ]
+  },
+  "autoActions": {
+    "onSave": [
+      "format-code",
+      "fix-eslint",
+      "organize-imports",
+      "check-file-size",
+      "update-imports"
+    ],
+    "onType": [
+      "validate-syntax",
+      "check-types",
+      "suggest-imports"
+    ],
+    "beforeCommit": [
+      "run-linting",
+      "run-tests",
+      "check-coverage",
+      "validate-commit-message"
+    ]
+  },
+  "templates": {
+    "controller": {
+      "path": "src/api/controllers/",
+      "includes": ["validation", "error-handling", "swagger-docs", "tests"]
+    },
+    "service": {
+      "path": "src/services/",
+      "includes": ["interface", "error-handling", "logging", "tests"]
+    },
+    "model": {
+      "path": "src/entities/",
+      "includes": ["validation", "relations", "migration", "tests"]
+    }
+  }
+}
