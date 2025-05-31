@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  test:
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      - PYTHONPATH=/app
+    command: pytest -v --cov=spyq
+
+  shell:
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      - PYTHONPATH=/app
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+  ansible-test:
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      - PYTHONPATH=/app
+      - ANSIBLE_FORCE_COLOR=1
+    command: >
+      sh -c "pip install ansible && ansible-playbook tests/integration/playbooks/test_spyq_validations.yml -v"
+
+  validation-examples:
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      - PYTHONPATH=/app
+    command: >
+      sh -c "pip install flake8 && python examples/run_validation_examples.py"

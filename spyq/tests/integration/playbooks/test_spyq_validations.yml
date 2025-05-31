@@ -1,0 +1,82 @@
+---
+- name: Test SPYQ validations
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    test_dir: /tmp/spyq_integration_test
+    python_scripts:
+      - name: valid_script.py
+        content: |
+          # This is a valid Python script
+          def hello():
+              print("Hello, World!")
+
+
+          if __name__ == "__main__":
+              hello()
+      
+      - name: invalid_script.py
+        content: |
+          # This script has style issues
+          def hello():
+            print("Hello, World!")  # Inconsistent indentation
+          
+          if __name__=="__main__":
+              hello()
+  
+  tasks:
+    - name: Create test directory
+      ansible.builtin.file:
+        path: "{{ test_dir }}"
+        state: directory
+    
+    - name: Create test Python scripts
+      ansible.builtin.copy:
+        dest: "{{ test_dir }}/{{ item.name }}"
+        content: "{{ item.content }}"
+      loop: "{{ python_scripts }}"
+      loop_control:
+        label: "Create {{ item.name }}"
+    
+    - name: Install Python dependencies
+      ansible.builtin.pip:
+        name:
+          - pytest
+          - flake8
+          - black
+          - isort
+          - mypy
+        state: present
+    
+    - name: Run flake8 validation on valid script
+      ansible.builtin.command: >
+        python -m flake8 "{{ test_dir }}/valid_script.py"
+      register: valid_validation
+      changed_when: false
+      ignore_errors: true
+    
+    - name: Verify valid script passes validation
+      ansible.builtin.assert:
+        that:
+          - valid_validation.rc == 0
+        fail_msg: "Valid script failed validation"
+    
+    - name: Run flake8 validation on invalid script
+      ansible.builtin.command: >
+        python -m flake8 "{{ test_dir }}/invalid_script.py"
+      register: invalid_validation
+      changed_when: false
+      ignore_errors: true
+    
+    - name: Verify invalid script fails validation
+      ansible.builtin.assert:
+        that:
+          - invalid_validation.rc != 0
+        fail_msg: "Invalid script passed validation"
+    
+    - name: Clean up test directory
+      ansible.builtin.file:
+        path: "{{ test_dir }}"
+        state: absent
+        force: true

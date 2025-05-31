@@ -1,0 +1,44 @@
+---
+- name: Test SPYQ commands
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Create test directory
+      ansible.builtin.file:
+        path: /tmp/spyq_test
+        state: directory
+
+    - name: Test spyq version
+      ansible.builtin.command: spyq --version
+      register: version_output
+      changed_when: false
+
+    - name: Display version
+      ansible.builtin.debug:
+        var: version_output.stdout
+
+    - name: Setup SPYQ in test directory
+      ansible.builtin.command: spyq setup /tmp/spyq_test
+      register: setup_output
+      changed_when: setup_output.rc == 0
+
+    - name: Display setup output
+      ansible.builtin.debug:
+        var: setup_output.stdout_lines
+
+    - name: Verify files were created
+      ansible.builtin.find:
+        paths: /tmp/spyq_test
+        patterns: "*"
+      register: found_files
+
+    - name: Display found files
+      ansible.builtin.debug:
+        var: found_files.files | map(attribute='path') | list
+
+    - name: Clean up
+      ansible.builtin.file:
+        path: /tmp/spyq_test
+        state: absent

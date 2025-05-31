@@ -1,48 +1,30 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
-[project]
+[tool.poetry]
 name = "spyq"
-version = "0.1.0"
+version = "0.1.4"
 description = "SPYQ - Shell Python Quality Guard"
-authors = [
-    {name = "Tom Sapletta", email = "tom@sapletta.com"}
-]
+authors = ["Tom Sapletta <tom@sapletta.com>"]
 readme = "README.md"
-requires-python = ">=3.7"
-license = {text = "Apache-2.0"}
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Operating System :: OS Independent",
-]
-dependencies = [
-    "click>=8.1.7",
-]
+license = "Apache-2.0"
+packages = [{include = "spyq", from = "src"}]
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.4.0",
-    "pytest-cov>=4.1.0",
-    "black>=23.7.0",
-    "isort>=5.12.0",
-    "flake8>=6.1.0",
-    "mypy>=1.5.0",
-]
+[tool.poetry.dependencies]
+python = "^3.7"
+click = "^8.1.7"
 
-[project.scripts]
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+black = "^23.7.0"
+isort = "^5.12.0"
+flake8 = "^6.1.0"
+mypy = "^1.5.0"
+
+[tool.poetry.scripts]
 spyq = "spyq.cli:main"
-
-[tool.setuptools.packages.find]
-where = ["src"]
 
 [tool.black]
 line-length = 88

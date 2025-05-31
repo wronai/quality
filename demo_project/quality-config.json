@@ -1,0 +1,68 @@
+{
+  "version": "1.0.0",
+  "description": "Quality Guard configuration",
+  "rules": {
+    "require_tests": true,
+    "require_docstrings": true,
+    "require_architecture_docs": false,
+    "max_file_lines": 200,
+    "max_function_lines": 50,
+    "max_function_params": 4,
+    "max_nesting_depth": 4,
+    "max_complexity": 10,
+    "max_class_methods": 15
+  },
+  "enforcement": {
+    "level": "error",
+    "strict_mode": true,
+    "block_execution": true
+  },
+  "patterns": {
+    "test_patterns": [
+      "tests/test_*.py",
+      "test_*.py",
+      "*_test.py",
+      "tests/**/test_*.py"
+    ],
+    "doc_files": [
+      "README.md",
+      "docs/README.md",
+      "docs/API.md",
+      "docs/architecture.md",
+      "ARCHITECTURE.md",
+      "API.md"
+    ],
+    "forbidden_patterns": [
+      "eval(",
+      "exec(",
+      "globals()",
+      "__import__",
+      "input("
+    ]
+  },
+  "auto_generation": {
+    "enabled": true,
+    "tests": true,
+    "docs": true,
+    "templates_dir": "templates/"
+  },
+  "exceptions": {
+    "missing_test": "MissingTestException",
+    "missing_docs": "MissingDocumentationException",
+    "high_complexity": "ComplexityException",
+    "function_too_long": "FunctionTooLongException",
+    "unauthorized_function": "UnauthorizedFunctionException"
+  },
+  "integrations": {
+    "vscode": true,
+    "github_actions": true,
+    "pre_commit": true,
+    "docker": true
+  },
+  "reporting": {
+    "enabled": true,
+    "format": "html",
+    "output_dir": "reports/",
+    "include_suggestions": true
+  }
+}
